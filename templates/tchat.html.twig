@@ -16,7 +16,16 @@
         <a class="nav-link disabled" href="{{ 'logout' }}">Logout</a>
     </nav>
 
-    echo "C'est reussie" .$session;
+    {% for message in messages %}
+            {{ message.message }}
+    {% endfor %}
+
+    <footer>
+        <form method="post" action="{{ '/tchat' }}">
+            <input type="text" id="message" name="message" placeholder="message">
+            <button type="submit" name ="send" value="send">send</button>
+        </form>
+    </footer>
 
 
 {% endblock %}

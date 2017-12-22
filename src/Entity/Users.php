@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Routing\Annotation;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
@@ -73,6 +74,22 @@ class Users
     public function setMdp($mdp)
     {
         $this->mdp = $mdp;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMesssage()
+    {
+        return $this->messsage;
+    }
+
+    /**
+     * @param mixed $messsage
+     */
+    public function setMesssage($messsage): void
+    {
+        $this->messsage = $messsage;
     }
 
 

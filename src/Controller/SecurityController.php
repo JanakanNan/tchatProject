@@ -23,32 +23,26 @@ class SecurityController extends Controller{
 
     public function login(Request $request, SessionInterface $session){
 
-        if( isset($_POST['submit'])){
+        if( $request->request->has('submit')){
 
-            $Users = new Users();
+            $pseudo = $request->request->get('pseudo');
+            $mdp= $request->request->get('mdp');
 
-            $user = $request->request->get('pseudo');
-            $password = $request->request->get('mdp');
-
-            $Users = $this->getDoctrine()
+            $user = $this->getDoctrine()
                 -> getRepository(Users::class)
-                -> findBy([
-                    'pseudo' => $user,
-                    'mdp' => $password
+                -> findOneBy([
+                    'pseudo' => $pseudo,
+                    'mdp' => $mdp
                 ]);
 
-            if($session){
+            if($user){
+                $session->set('idUser', $user->getId());
                 return $this->redirect('/tchat');
             }
         }
 
         return $this->render('base.html.twig');
 
-
-    }
-
-    public function session(SessionInterface $session){
-        return $session->get('pseudo');
     }
 
 
