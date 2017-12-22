@@ -8,27 +8,48 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 class SecurityController extends Controller{
 
     /**
-     * @Route("/login", name="login")
+     * @Route("/login")
      */
 
-    public function login(Request $request, AuthenticationUtils $authenUtils){
+    public function login(Request $request, SessionInterface $session){
 
-        $error = $authenUtils->getLastAuthenticationError();
+        if( isset($_POST['submit'])){
 
-        $lastUsername= $authenUtils->getLastUsername();
+            $Users = new Users();
 
-        return $this->render('base.html.twig', array(
-           'last_username' => $lastUsername,
-            'error' => $error,
-        ));
+            $user = $request->request->get('pseudo');
+            $password = $request->request->get('mdp');
+
+            $Users = $this->getDoctrine()
+                -> getRepository(Users::class)
+                -> findBy([
+                    'pseudo' => $user,
+                    'mdp' => $password
+                ]);
+
+            if($session){
+                return $this->redirect('/tchat');
+            }
+        }
+
+        return $this->render('base.html.twig');
+
 
     }
+
+    public function session(SessionInterface $session){
+        return $session->get('pseudo');
+    }
+
+
 }
